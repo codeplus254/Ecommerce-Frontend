@@ -12,22 +12,27 @@ import { Link }  from 'react-router-dom';
 import styles from './styles';
 import * as alertActions from "../../../../store/actions/alerts";
 import * as categoriesActions from '../../../../store/actions/categories';
+import * as departmentsActions from '../../../../store/actions/departments';
 import './style.css';
 
 class NavBar extends React.Component {
 
-    state = {
+    constructor(props) {
+      super(props);
+      this.state = {
         mobileOpen: false
-    };
+      };
+      this.props.getAllDepartments();
+    }
+    
+    onDepartmentClick(id) {
+      this.props.getAllCategoriesInDepartment({
+        department_id: id,
+      })
+    }
 
     handleDrawerToggle() {
         this.setState({ mobileOpen: !this.state.mobileOpen });
-    }
-
-    componentWillMount() {
-      this.props.getAllCategoriesInDepartment({
-          department_id: 1,
-      });
     }
 
     componentDidMount(){
@@ -49,7 +54,9 @@ class NavBar extends React.Component {
 
         const {
             classes,
-            brand
+            brand,
+            departments,
+            categories,
         } = this.props;
         console.log(this.props);
         const brandComponent =
@@ -66,66 +73,27 @@ class NavBar extends React.Component {
                         </div>
                         <Hidden mdDown>
                         <div className={`departments categories ${classes.linksContainer}`}>
-                            <NavDropdown
-                                title='Regional'
-                                className="department navDropdown"
-                            >
-                                <NavDropdown.Item
-                                    onClick={() => {}}
-                                    className="category"
-                                >
-                                    French
-                                </NavDropdown.Item>
-
-                                <NavDropdown.Item
-                                    onClick={() => {}}
-                                    className="category"
-                                >
-                                    Italian
-                                </NavDropdown.Item>
-                                <NavDropdown.Item
-                                    onClick={() => {}}
-                                    className="category"
-                                >
-                                    Irish
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                            <NavDropdown
-                                title='Nature'
-                                className="department navDropdown"
-                            >
-                                <NavDropdown.Item
-                                    onClick={() => {}}
-                                    className="category"
-                                >
-                                    Animal
-                                </NavDropdown.Item>
-                                <NavDropdown.Item
-                                    onClick={() => {}}
-                                >
-                                    Flower
-                                </NavDropdown.Item>
-
-                            </NavDropdown>
-
-                            <NavDropdown
-                                title='Seasonal'
-                                className="department navDropdown"
-                            >
-                                <NavDropdown.Item
-                                    onClick={() => {}}
-                                    className="category"
-                                >
-                                    Christmas
-                                </NavDropdown.Item>
-                                <NavDropdown.Item
-                                    onClick={() => {}}
-                                    className="category"
-                                >
-                                    Valentine's
-                                </NavDropdown.Item>
-
-                            </NavDropdown>
+                          {departments.length>0 && departments.map((department) => {
+                                              return (
+                                                <NavDropdown 
+                                                  title= {department.name}
+                                                  className="department navDropdown"
+                                                  onClick={() => {this.onDepartmentClick(department.department_id)}}
+                                                  >
+                                                  {categories.length>0 && categories.map((category) => {
+                                                    return (
+                                                      <NavDropdown.Item
+                                                        onClick={() => {}}
+                                                        className="category"
+                                                    >
+                                                        {category.name}
+                                                    </NavDropdown.Item>
+                                                    )
+                                                  })}
+                                                </NavDropdown>
+                                              )
+                                            
+                                            })}
                         </div>
                         </Hidden>
                         <Hidden mdDown>
@@ -210,7 +178,16 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         showCart: alertActions.showCart,
         getAllCategoriesInDepartment: categoriesActions.getAllCategoriesInDepartment,
+        getAllDepartments: departmentsActions.getAllDepartments,
     }, dispatch);
 }
 
-export default withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(NavBar));
+function mapStateToProps(state) {
+  const { departments, categories } = state;
+  return {
+      departments: departments.all.data,
+      categories: categories.allCategoriesIndepartment.data.rows,
+  }
+  }
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(NavBar));
