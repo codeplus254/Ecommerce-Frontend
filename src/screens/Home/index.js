@@ -27,7 +27,7 @@ import {bindActionCreators} from 'redux';
 import connect from 'react-redux/es/connect/connect';
 import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 import Close from '@material-ui/icons/Close';
-import * as productActions from '../../store/actions/products'
+import * as productActions from '../../store/actions/products';
 import styles from './styles';
 import {Container, Section} from '../../components/Layout';
 import ListProduct from '../../components/ListProduct';

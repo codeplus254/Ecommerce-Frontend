@@ -8,11 +8,10 @@ const initialState = {
     error: false
 };
 
-const getAllCategoriesInDepartmentReducer = function (state = initialState, action) {
-  console.log(action);
+const allDepartmentsReducer = function (state = initialState, action) {
     switch ( action.type )
     {
-        case Actions.GET_ALL_CATEGORIES_INDEPARTMENT:
+        case Actions.GET_ALL_DEPARTMENTS:
         {
             return {
                 ...state,
@@ -20,7 +19,7 @@ const getAllCategoriesInDepartmentReducer = function (state = initialState, acti
                 error: false
             };
         }
-        case Actions.GET_ALL_CATEGORIES_INDEPARTMENT_SUCCESS:
+        case Actions.GET_ALL_DEPARTMENTS_SUCCESS:
         {
             return {
                 ...state,
@@ -29,7 +28,7 @@ const getAllCategoriesInDepartmentReducer = function (state = initialState, acti
                 error: false
             };
         }
-        case Actions.GET_ALL_CATEGORIES_INDEPARTMENT_ERROR:
+        case Actions.GET_ALL_DEPARTMENTS_ERROR:
         {
             return {
                 ...state,
@@ -44,4 +43,4 @@ const getAllCategoriesInDepartmentReducer = function (state = initialState, acti
     }
 };
 
-export default getAllCategoriesInDepartmentReducer;
+export default allDepartmentsReducer;
