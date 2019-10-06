@@ -2,7 +2,7 @@ import axios from 'axios';
 import EventEmitter from '../utils/EventEmitter';
 import systemConfig from '../config/system';
 
-class productsService extends EventEmitter {
+class ordersService extends EventEmitter {
 
     constructor() {
         super();
@@ -77,6 +77,7 @@ class productsService extends EventEmitter {
     getProductById = ({ product_id }) => {
         return new Promise((resolve, reject) => {
             axios.get(`${systemConfig.serverBaseUrl}/products/${product_id}`).then(response => {
+                console.log(response)
                 resolve(response.data)
             }).catch((error) => {
                 reject(error.response);
@@ -107,6 +108,7 @@ class productsService extends EventEmitter {
     getProductReviews = ({ product_id }) => {
         return new Promise((resolve, reject) => {
             axios.get(`${systemConfig.serverBaseUrl}/products/${product_id}/reviews`).then(response => {
+                console.log(response.data)
                 resolve(response.data)
             }).catch((error) => {
                 reject(error.response);
@@ -128,6 +130,6 @@ class productsService extends EventEmitter {
     };
 }
 
-const instance = new productsService();
+const instance = new ordersService();
 
 export default instance;

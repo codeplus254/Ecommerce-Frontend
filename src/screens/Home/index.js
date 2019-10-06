@@ -50,7 +50,6 @@ class Home extends Component {
 
     render() {
         const {classes, products } = this.props;
-
         let currentProducts =  products;
 
         return (
@@ -231,7 +230,7 @@ class Home extends Component {
                                     </Paper>
                                 </div>
                                 <div className="w-3/4 flex flex-wrap ml-6 productsSection">
-                                    {currentProducts.map((product, index) => (
+                                    {currentProducts && currentProducts.map((product, index) => (
                                         <div key={index} className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/3 mb-4">
                                             <ListProduct product={product}/>
                                         </div>

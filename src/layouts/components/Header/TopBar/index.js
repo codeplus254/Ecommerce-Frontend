@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import styles from './styles';
 import Button from "@material-ui/core/Button";
 import * as alertActions from "../../../../store/actions/alerts";
+import * as customerActions from '../../../../store/actions/customer';
 
 const links = [{
     title: 'Daily Deals',
@@ -22,19 +23,33 @@ const links = [{
 
 class TopBar extends React.Component {
 
-    render() {
+    constructor(props) {
+      super(props);
+      this.logout = this.logout.bind(this);
+      let token = sessionStorage.getItem('USER-KEY');
+      token && this.props.getSingleCustomer(token);
+    }
 
+    logout() {
+      sessionStorage.removeItem('USER-KEY');
+      this.forceUpdate();
+    }
+
+    render() {
+        let authenticated;
+        let token = sessionStorage.getItem('USER-KEY');
+        (!token || token === '') ? authenticated = false : authenticated = true;
         const {
             classes,
         } = this.props;
-
         return (
             <AppBar className={classes.topBar}>
                 <Toolbar className={classes.toolbar}>
+                  {(!token || token === '') ? 
                     <div className={classes.authText + ' ' + classes.divTopBar}>
                             <span>Hi!</span>
                             <Link onClick={() => {
-                              this.props.showAuth(false)
+                              this.props.showAuth(false);
                               }} className={classes.authLink} id="btnSignIn" style={{color: 'red'}}>
                               Sign in
                             </Link>
@@ -44,17 +59,20 @@ class TopBar extends React.Component {
                               }} className={classes.authLink} id="btnRegister" style={{color: 'red'}}>
                               Register
                           </Link>
-                    </div>
+                    </div> :
                     <div className={classes.authText + ' ' + classes.divTopBar}>
-                            <span>Hi Charles!</span>
+                            <span>Hi {this.props.customer.name}!</span>
                             <Link className={classes.authLink} style={{color: 'red'}}>
                             My Profile
                             </Link>
                             <span>|</span>
-                            <Link className={classes.authLink} id="btnLogout" style={{color: 'red'}}>
+                            <Link onClick={() => {
+                              this.logout();
+                              }} className={classes.authLink} id="btnLogout" style={{color: 'red'}}>
                              Logout
                             </Link>
                     </div>
+                  }
                     <Hidden mdDown className={classes.divTopBar}>
                         <div className={classes.linksContainer}>
                             {
@@ -103,9 +121,15 @@ TopBar.propTypes = {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         showCart: alertActions.showCart,
-        showAuth: alertActions.showAuth
+        showAuth: alertActions.showAuth,
+        getSingleCustomer: customerActions.getSingleCustomer,
     }, dispatch);
 }
 
+function mapStateToProps({ customer }) {
+  return {
+      customer: customer.singleCustomer.data,
+  }
+}
 
-export default withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(TopBar));
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(TopBar));

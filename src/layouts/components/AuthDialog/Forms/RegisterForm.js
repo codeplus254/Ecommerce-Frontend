@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
+import {bindActionCreators} from 'redux';
+import connect from 'react-redux/es/connect/connect';
 import {Button, InputAdornment, withStyles} from '@material-ui/core';
 import EmailIcon from '@material-ui/icons/Email';
 import PasswordIcon from '@material-ui/icons/VpnKey';
@@ -6,13 +9,22 @@ import NameIcon from '@material-ui/icons/Person';
 import {TextFieldFormsy} from '../../../../components/Formsy';
 import Formsy from 'formsy-react';
 import styles from './styles';
+import * as customerActions from '../../../../store/actions/customer';
+import * as alertActions from '../../../../store/actions/alerts';
 
 class RegisterForm extends Component {
 
     form = React.createRef();
+    constructor(props) {
+      super(props)
+      this.onSubmit = this.onSubmit.bind(this);
+    }
 
+    onSubmit(data) {
+      this.props.createNewCustomer(data);
+      this.props.hideAuth();
+    }
     render() {
-
         return (
             <div className="w-full flex flex-row justify-center">
                 <Formsy
@@ -81,5 +93,17 @@ class RegisterForm extends Component {
     }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+      createNewCustomer: customerActions.createNewCustomer,
+      hideAuth: alertActions.hideAuth,
+  }, dispatch);
+}
 
-export default withStyles(styles)(RegisterForm);
+function mapStateToProps({customer}) {
+  return {
+      customer: customer,
+  }
+}
+
+export default withStyles(styles)(withRouter(connect(mapStateToProps, mapDispatchToProps)(RegisterForm)));

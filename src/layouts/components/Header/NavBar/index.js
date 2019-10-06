@@ -11,6 +11,7 @@ import {
 import { Link }  from 'react-router-dom';
 import styles from './styles';
 import * as alertActions from "../../../../store/actions/alerts";
+import * as categoriesActions from '../../../../store/actions/categories';
 import './style.css';
 
 class NavBar extends React.Component {
@@ -21,6 +22,12 @@ class NavBar extends React.Component {
 
     handleDrawerToggle() {
         this.setState({ mobileOpen: !this.state.mobileOpen });
+    }
+
+    componentWillMount() {
+      this.props.getAllCategoriesInDepartment({
+          department_id: 1,
+      });
     }
 
     componentDidMount(){
@@ -44,7 +51,7 @@ class NavBar extends React.Component {
             classes,
             brand
         } = this.props;
-
+        console.log(this.props);
         const brandComponent =
         <Link to={'/'} className={classes.brand}>
           {brand}
@@ -201,7 +208,8 @@ NavBar.propTypes = {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        showCart: alertActions.showCart
+        showCart: alertActions.showCart,
+        getAllCategoriesInDepartment: categoriesActions.getAllCategoriesInDepartment,
     }, dispatch);
 }
 
