@@ -55,12 +55,14 @@ class Product extends Component {
         this.props.getProductLocations({
             product_id: params.id
         });
+        this.props.getProductReviews({
+          product_id: params.id
+      });
     }
 
 
     render() {
-        const {classes, product, loading, locations, locationsLoading, match: {params}} = this.props;
-
+        const {classes, product, loading, locations, locationsLoading, reviews, match: {params}} = this.props;
         const isLoading = loading || !product.image || locationsLoading
         const isDiscounted = parseFloat(product.discounted_price) > 0;
 
@@ -87,11 +89,11 @@ class Product extends Component {
                                         </Carousel>
                                     </div>
                                     <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 p-10">
-                                        <div className={`w-full h-8 ${classes.breadcrumbsText}`}>
+                                        {/* <div className={`w-full h-8 ${classes.breadcrumbsText}`}>
                                             Home <span className="ml-4"/> • <span
                                             className="ml-4"/> {locations[0].department_name} <span
                                             className="ml-4"/> • <span className="ml-4"/> {locations[0].category_name}
-                                        </div>
+                                        </div> */}
                                         <div className="w-full h-8 mt-2">
                                             <StarRatings
                                                 rating={3}
@@ -259,8 +261,11 @@ class Product extends Component {
                                                 Product Reviews
                                             </span>
                                             </div>
-                                                <Review rating={5} name="Peter Test" review="Test Review 1" />
-                                                <Review rating={3} name="Celestine Test" review="Test Review 2" />
+                                            {reviews.length>0 && reviews.map((review) => {
+                                              return (<Review rating={review.rating} name={review.name} review={review.review} />)
+                                            })}
+                                                
+                                                
                                         </div>
                                     </Section>
                                 </Hidden>
@@ -281,6 +286,7 @@ function mapDispatchToProps(dispatch) {
         getSingleProduct: productActions.getSingleProduct,
         getProductDetails: productActions.getProductDetails,
         getProductLocations: productActions.getProductLocations,
+        getProductReviews: productActions.getProductReviews,
         showAuth: alertActions.showAuth
     }, dispatch);
 }
@@ -289,6 +295,7 @@ function mapStateToProps({product, cart, auth}) {
     return {
         product: product.item.data,
         locations: product.locations.data,
+        reviews: product.reviews.data,
         locationsLoading: product.locations.isLoading,
         loading: product.item.isLoading,
     }
