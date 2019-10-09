@@ -46,12 +46,11 @@ class Home extends Component {
         });
     }
 
-
-
     render() {
+        console.log('HOME INDEX.JS', this.props);
         const {classes, products } = this.props;
         let currentProducts =  products;
-
+        console.log('current', currentProducts);
         return (
             <div className={classes.root}>
                 <Container>
@@ -258,7 +257,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps({products, categories, departments}) {
     return {
-        products: products.all.data.rows,
+        products: products.allProductsIncategory.data.rows.length > 0 ? products.allProductsIncategory.data.rows : products.all.data.rows,
     }
 }
 

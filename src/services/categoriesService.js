@@ -30,7 +30,6 @@ class categoriesService extends EventEmitter {
     getProductCategory = ({ product_id }) => {
         return new Promise((resolve, reject) => {
             axios.get(`${systemConfig.serverBaseUrl}/categories/inProduct/${product_id}`).then(response => {
-              console.log(response)
                 resolve(response.data)
             }).catch((error) => {
                 reject(error.response);
@@ -39,10 +38,8 @@ class categoriesService extends EventEmitter {
     };
 
     getAllCategoriesInDepartment = ({ department_id }) => {
-      console.log(department_id)
         return new Promise((resolve, reject) => {
             axios.get(`${systemConfig.serverBaseUrl}/categories/inDepartment/${department_id}`).then(response => {
-              console.log(response);
                 resolve(response.data)
             }).catch((error) => {
                 reject(error.response);

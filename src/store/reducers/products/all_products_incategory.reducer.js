@@ -8,10 +8,10 @@ const initialState = {
     error: false
 };
 
-const getAllCategoriesInDepartmentReducer = function (state = initialState, action) {
+const allProductsIncategoryReducer = function (state = initialState, action) {
     switch ( action.type )
     {
-        case Actions.GET_ALL_CATEGORIES_INDEPARTMENT:
+        case Actions.GET_ALL_PRODUCTS_INCATEGORY:
         {
             return {
                 ...state,
@@ -19,7 +19,7 @@ const getAllCategoriesInDepartmentReducer = function (state = initialState, acti
                 error: false
             };
         }
-        case Actions.GET_ALL_CATEGORIES_INDEPARTMENT_SUCCESS:
+        case Actions.GET_ALL_PRODUCTS_INCATEGORY_SUCCESS:
         {
             return {
                 ...state,
@@ -28,7 +28,7 @@ const getAllCategoriesInDepartmentReducer = function (state = initialState, acti
                 error: false
             };
         }
-        case Actions.GET_ALL_CATEGORIES_INDEPARTMENT_ERROR:
+        case Actions.GET_ALL_PRODUCTS_INCATEGORY_ERROR:
         {
             return {
                 ...state,
@@ -43,4 +43,4 @@ const getAllCategoriesInDepartmentReducer = function (state = initialState, acti
     }
 };
 
-export default getAllCategoriesInDepartmentReducer;
+export default allProductsIncategoryReducer;

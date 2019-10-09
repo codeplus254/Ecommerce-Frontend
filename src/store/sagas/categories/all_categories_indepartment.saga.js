@@ -8,9 +8,7 @@ import {
     from "../../actions/categories";
 function* getAllCategoriesIndepartmentSaga(action) {
     try {
-      console.log(action)
         const data = yield call(categoriesService.getAllCategoriesInDepartment, action.payload);
-        console.log(data)
         yield put({
             type: GET_ALL_CATEGORIES_INDEPARTMENT_SUCCESS,
             payload: data

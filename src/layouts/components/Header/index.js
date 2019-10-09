@@ -7,18 +7,37 @@ import {connect} from "react-redux";
 
 class Header extends React.Component {
 
+    constructor(props) {
+      super(props);
+      this.state = {
+        categoryProducts: null,
+      };
+      //this.props.getAllDepartments();
+    }
+
+    componentDidMount() {
+      console.log('componentDidMount')
+      
+    };
+    
+    myCallback = (dataFromChild) => {
+      console.log(dataFromChild)
+      this.setState({categoryProducts: dataFromChild})
+    };
+
     render() {
 
         const {
             classes,
             brand,
-            categories
+            categories,
+            products
         } = this.props;
-
+        console.log('header index props:', this.props)
         return (
             <div>
                 <TopBar />
-                <NavBar classes={classes} brand={brand} categories={categories} />
+                <NavBar classes={classes} brand={brand} categories={categories} products={products} callbackFromParent={this.myCallback} />
             </div>
         );
     }

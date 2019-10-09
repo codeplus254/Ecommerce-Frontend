@@ -13,6 +13,7 @@ import styles from './styles';
 import * as alertActions from "../../../../store/actions/alerts";
 import * as categoriesActions from '../../../../store/actions/categories';
 import * as departmentsActions from '../../../../store/actions/departments';
+import * as productsActions from '../../../../store/actions/products';
 import './style.css';
 
 class NavBar extends React.Component {
@@ -22,6 +23,7 @@ class NavBar extends React.Component {
       this.state = {
         mobileOpen: false
       };
+      console.log(this.props)
       this.props.getAllDepartments();
     }
     
@@ -29,6 +31,18 @@ class NavBar extends React.Component {
       this.props.getAllCategoriesInDepartment({
         department_id: id,
       })
+    }
+
+    async onCategoryClick(id) {
+      const data = await this.props.getAllProductsInCategory({
+        category_id: id,
+        page: 1,
+        limit: 9,
+        description_length: 120
+      });
+      this.forceUpdate();
+      console.log('category clicked',data)
+      
     }
 
     handleDrawerToggle() {
@@ -50,15 +64,19 @@ class NavBar extends React.Component {
       });
     }
 
-    render() {
+    componentDidUpdate() {
+      console.log('componentDidUpdate', this.props)
+      this.props.products.length > 0 && this.props.callbackFromParent(this.props.products);
+    }
 
+    render() {
+        console.log('Navbar index props:', this.props)
         const {
             classes,
             brand,
             departments,
             categories,
         } = this.props;
-        console.log(this.props);
         const brandComponent =
         <Link to={'/'} className={classes.brand}>
           {brand}
@@ -83,7 +101,7 @@ class NavBar extends React.Component {
                                                   {categories.length>0 && categories.map((category) => {
                                                     return (
                                                       <NavDropdown.Item
-                                                        onClick={() => {}}
+                                                        onClick={() => {this.onCategoryClick(category.category_id)}}
                                                         className="category"
                                                     >
                                                         {category.name}
@@ -179,14 +197,16 @@ function mapDispatchToProps(dispatch) {
         showCart: alertActions.showCart,
         getAllCategoriesInDepartment: categoriesActions.getAllCategoriesInDepartment,
         getAllDepartments: departmentsActions.getAllDepartments,
+        getAllProductsInCategory: productsActions.getAllProductsInCategory,
     }, dispatch);
 }
 
 function mapStateToProps(state) {
-  const { departments, categories } = state;
+  const { departments, categories, products } = state;
   return {
       departments: departments.all.data,
       categories: categories.allCategoriesIndepartment.data.rows,
+      products: products.allProductsIncategory.data.rows,
   }
   }
 

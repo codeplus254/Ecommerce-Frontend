@@ -50,9 +50,15 @@ class productsService extends EventEmitter {
         });
     };
 
-    getProductsInCategory = ({ category_id }) => {
+    getProductsInCategory = ({page, limit, description_length, category_id }) => {
         return new Promise((resolve, reject) => {
-            axios.get(`${systemConfig.serverBaseUrl}/products/inCategory/${category_id}`).then(response => {
+            axios.get(`${systemConfig.serverBaseUrl}/products/inCategory/${category_id}`, {
+              params: {
+                  page,
+                  limit,
+                  description_length
+              }
+          }).then(response => {
                 resolve(response.data)
             }).catch((error) => {
                 reject(error.response);

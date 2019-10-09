@@ -36,10 +36,12 @@ const styles = theme => ({
 const dashboardRoutes = [];
 
 class Layout extends React.Component {
-
+    componentDidMount() {
+      console.log('layout props',this.props);
+    }
     render() {
         const {children } = this.props;
-
+        
         return (<AppContext.Consumer>
             {({routes}) => (
                 <div>
